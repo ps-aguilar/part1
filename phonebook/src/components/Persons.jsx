@@ -8,3 +8,5 @@ const Persons = ({ persons, onDelete }) => (
     ))}
   </>
 )
+
+export default Persons

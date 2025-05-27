@@ -3,12 +3,15 @@ import personService from './services/persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [successMessage, setSuccessMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -38,6 +41,12 @@ const App = () => {
         .remove(id)
         .then(() => {
           setPersons(persons.filter(p => p.id !== id))
+          setSuccessMessage(`Se eliminó a ${person.name}`)
+          setTimeout(() => setSuccessMessage(null), 5000)
+        })
+        .catch(error => {
+          setErrorMessage(`No se pudo eliminar a ${person.name}. Ya fue borrado.`)
+          setTimeout(() => setErrorMessage(null), 5000)
         })
     }
   }
@@ -65,6 +74,13 @@ const App = () => {
             ))
             setNewName('')
             setNewNumber('')
+            setSuccessMessage(`Se actualizó el número de ${returnedPerson.name}`)
+            setTimeout(() => setSuccessMessage(null), 5000)
+          })
+          .catch(error => {
+            setErrorMessage(`La persona '${existingPerson.name}' ya no existe en el servidor.`)
+            setTimeout(() => setErrorMessage(null), 5000)
+            setPersons(persons.filter(p => p.id !== existingPerson.id))
           })
 
         return
@@ -81,6 +97,12 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+        setSuccessMessage(`Se agregó a ${returnedPerson.name}`)
+        setTimeout(() => setSuccessMessage(null), 5000)
+      })
+      .catch(error => {
+        setErrorMessage('No se pudo agregar el contacto.')
+        setTimeout(() => setErrorMessage(null), 5000)
       })
   }
 
@@ -91,6 +113,8 @@ const App = () => {
   return (
     <div>
       <h2>Agenda Telefónica</h2>
+      <Notification message={successMessage} type="success" />
+      <Notification message={errorMessage} type="error" />
 
       <Filter value={filter} onChange={handleFilterChange} />
 
@@ -106,7 +130,13 @@ const App = () => {
 
       <h3>Números</h3>
 
-      <Persons persons={filteredPersons} onDelete={handleDelete} />
+      {
+        filteredPersons.length > 0 ? (
+          <Persons persons={filteredPersons} onDelete={handleDelete} />
+        ) : (
+          <p>No hay contactos para mostrar.</p>
+        )
+      }
     </div>
   )
 }
