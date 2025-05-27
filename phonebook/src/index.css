@@ -1,0 +1,28 @@
+.notification {
+  color: green;
+  background: #ddffdd;
+  font-size: 18px;
+  border: 2px solid green;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+.notification {
+  color: green;
+  background: #ddffdd;
+  font-size: 18px;
+  border: 2px solid green;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.error {
+  color: red;
+  background: #fdd;
+  font-size: 18px;
+  border: 2px solid red;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
